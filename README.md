@@ -3,6 +3,7 @@
 
 # Update
 * Test it use 8G Vram 36G Ram ,确保内存（不是显存）大于36G
+* If Vram >16G make prefetch_count =0, 显存大于16G时，设置swap（prefetch_count）数值为0以关闭层交换（使用Q6 gguf时）
 
 1.Installation  
 -----
