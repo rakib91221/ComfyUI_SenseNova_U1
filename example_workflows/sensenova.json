@@ -1,0 +1,75 @@
+{
+  "1": {
+    "inputs": {
+      "diffusion_models": "none",
+      "gguf": "SenseNova-U1-8B-MoT-8step-Q6_K.gguf",
+      "attn_backend": "auto"
+    },
+    "class_type": "SenseNova_SM_Model",
+    "_meta": {
+      "title": "SenseNova_SM_Model"
+    }
+  },
+  "3": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "保存图像"
+    }
+  },
+  "4": {
+    "inputs": {
+      "image": "ComfyUI_00003_ (1).png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "加载图像"
+    }
+  },
+  "10": {
+    "inputs": {
+      "img_mode": "edit",
+      "prompt": "改成英短蓝猫",
+      "seed": 316415668,
+      "steps": 8,
+      "target_pixels": {
+        "__value__": [
+          2720,
+          1536
+        ]
+      },
+      "cfg": 1,
+      "img_cfg": 1,
+      "timestep_shift": 3,
+      "batch_size": 1,
+      "prefetch_count": 1,
+      "cfg_norm": "none",
+      "enhance": false,
+      "think_mode": false,
+      "do_sample": true,
+      "max_new_tokens": 1024,
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "top_k": 0,
+      "repetition_penalty": 0,
+      "model": [
+        "1",
+        0
+      ],
+      "image": [
+        "4",
+        0
+      ]
+    },
+    "class_type": "SenseNova_SM_Sampler",
+    "_meta": {
+      "title": "SenseNova_SM_Sampler"
+    }
+  }
+}

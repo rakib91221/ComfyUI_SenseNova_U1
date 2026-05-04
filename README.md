@@ -1,11 +1,38 @@
 # ComfyUI_SenseNova_U1
 [SenseNova-U1](https://github.com/OpenSenseNova/SenseNova-U1): Unifying Multimodal Understanding and Generation with NEO-Unify Architecture
 
-# Coming soon
-if use gguf Q6 need 8G Vram 32G Ram, imput image 1720*860
 
-Example
+1.Installation  
 -----
-![](https://github.com/smthemex/ComfyUI_SenseNova_U1/blob/main/example_workflows/example_edit.png)
+  In the ./ComfyUI/custom_nodes directory, run the following:   
+```
+git clone https://github.com/smthemex/ComfyUI_SenseNova_U1
 
-# Citation
+2.requirements  
+----
+```
+pip install -r requirements.txt
+```
+If some modules missing, please pip install   #ultralytics yolov8
+
+3.checkpoints 
+----
+[links](https://huggingface.co/smthem/SenseNova-U1-8B-MoT-Merger-gguf)
+[夸克网盘](https://pan.quark.cn/s/8180628d73c5)
+    
+```
+├── ComfyUI/models/gguf/
+|     ├── SenseNova-U1-8B-MoT-8step-Q6_K.gguf # optional 可选
+├── ComfyUI/models/diffusion_models/
+|     ├── SenseNova-U1-8B-MoT-8step-merge_bf16.safetensors # optional 可选
+
+```
+
+4. Example
+----
+![](https://github.com/smthemex/ComfyUI_SenseNova_U1/blob/main/example_workflows/example_edit.png)
+![](https://github.com/smthemex/ComfyUI_SenseNova_U1/blob/main/example_workflows/example_ti2i.png)
+![](https://github.com/smthemex/ComfyUI_SenseNova_U1/blob/main/example_workflows/example_t2i.png)
+
+Citation
+-----

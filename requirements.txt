@@ -1,0 +1,8 @@
+torch
+diffusers
+torchvision
+transformers # < 4.58.0
+accelerate
+tqdm
+gguf
+tokenizers
