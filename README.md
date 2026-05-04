@@ -1,13 +1,15 @@
 # ComfyUI_SenseNova_U1
 [SenseNova-U1](https://github.com/OpenSenseNova/SenseNova-U1): Unifying Multimodal Understanding and Generation with NEO-Unify Architecture
 
+# Update
+* Test it use 8G Vram 36G Ram ,确保内存（不是显存）大于36G
 
 1.Installation  
 -----
   In the ./ComfyUI/custom_nodes directory, run the following:   
 ```
 git clone https://github.com/smthemex/ComfyUI_SenseNova_U1
-
+```
 2.requirements  
 ----
 ```
@@ -17,7 +19,7 @@ If some modules missing, please pip install   #ultralytics yolov8
 
 3.checkpoints 
 ----
-[links](https://huggingface.co/smthem/SenseNova-U1-8B-MoT-Merger-gguf)
+[links](https://huggingface.co/smthem/SenseNova-U1-8B-MoT-Merger-gguf)  
 [夸克网盘](https://pan.quark.cn/s/8180628d73c5)
     
 ```
