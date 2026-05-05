@@ -18,7 +18,7 @@ from accelerate import init_empty_weights
 from contextlib import AbstractContextManager
 from ..utils import _streaming_model,load_gguf_checkpoint, match_state_dict,set_gguf2meta_model
 from ...src.sensenova_u1.models.neo_unify.modeling_qwen3 import set_attn_backend
-from safetensors.torch import load_file as _load_file
+from safetensors.torch import load_file as st_load_file
 from ...src.sensenova_u1.models.neo_unify.utils import load_image_native
 from ...src.sensenova_u1.models.neo_unify.utils import smart_resize
 from ...src.sensenova_u1.utils import (
@@ -192,10 +192,11 @@ class SenseNovaU1Editing:
                 #match_state_dict(self.model, sd,show_num=10)
                 set_gguf2meta_model(self.model,sd,self.dtype,torch.device("cpu"),) 
             else:
-                self.model = self.model.to_empty(device=torch.device("cpu"))
-                sd=_load_file(self.checkpoint)
+                #self.model = self.model.to_empty(device=torch.device("cpu"))
+                sd=st_load_file(self.checkpoint)
                 self.model.load_state_dict(sd, strict=False, assign=True)
                 self.model = self.model.to(device=torch.device("cpu"),dtype=self.dtype)
+                self.model.eval()
             del sd
             gc.collect()
         else:
