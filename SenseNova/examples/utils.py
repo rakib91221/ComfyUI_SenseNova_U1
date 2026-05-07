@@ -6,9 +6,11 @@ from collections.abc import Iterator
 from typing import Callable, TypeVar
 import gc
 import torch
+from ..src.sensenova_u1.utils import apply_loras_gguf
 
 _M = TypeVar("_M", bound=torch.nn.Module)
 T = TypeVar("T")
+
 
 
 def cleanup_memory() -> None:
@@ -80,13 +82,20 @@ def _streaming_model_(
         except Exception:
             print("Host empty cache cleanup failed; ignoring.", exc_info=True)
 
-def set_gguf2meta_model(meta_model,model_state_dict,dtype,device,):
+def set_gguf2meta_model(meta_model,model_state_dict,dtype,device,lora_sd=None):
     from diffusers import GGUFQuantizationConfig
     from diffusers.quantizers.gguf import GGUFQuantizer
 
     g_config = GGUFQuantizationConfig(compute_dtype=dtype or torch.bfloat16)
     hf_quantizer = GGUFQuantizer(quantization_config=g_config)
     hf_quantizer.pre_quantized = True
+    if lora_sd is not None:
+        try:
+            model_state_dict=apply_loras_gguf(model_state_dict, lora_sd)
+            print("Applying LoRAs to GGUF model success>")
+        except Exception as e:
+            print(f"Error applying LoRAs to GGUF model: {e}")
+            pass
 
     hf_quantizer._process_model_before_weight_loading(
         meta_model,
@@ -106,6 +115,7 @@ def set_gguf2meta_model(meta_model,model_state_dict,dtype,device,):
     
     del model_state_dict
     gc.collect()
+    
     return meta_model.to(dtype=dtype)
 
 

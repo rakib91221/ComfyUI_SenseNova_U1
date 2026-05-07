@@ -36,6 +36,7 @@ class SenseNova_SM_Model(io.ComfyNode):
             inputs=[
                 io.Combo.Input("diffusion_models",options= ["none"] + folder_paths.get_filename_list("diffusion_models")),
                 io.Combo.Input("gguf",options= ["none"] + folder_paths.get_filename_list("gguf")),
+                io.Combo.Input("lora",options= ["none"] + folder_paths.get_filename_list("loras")),
                 io.Combo.Input("attn_backend",options= ["auto", "flash", "sdpa"]),
             ],
             outputs=[
@@ -43,12 +44,13 @@ class SenseNova_SM_Model(io.ComfyNode):
                 ],
             )
     @classmethod
-    def execute(cls, diffusion_models,gguf,attn_backend) -> io.NodeOutput:
+    def execute(cls, diffusion_models,gguf,lora,attn_backend) -> io.NodeOutput:
         clear_comfyui_cache()
         dit_path=folder_paths.get_full_path("diffusion_models",diffusion_models) if diffusion_models != "none" else None
         gguf_path=folder_paths.get_full_path("gguf",gguf) if gguf != "none" else None
+        lora_path=folder_paths.get_full_path("loras",lora) if lora != "none" else None
         model_path=dit_path or gguf_path
-        model=load_sensenova_model(model_path,device,os.path.join(node_cr_path,"SenseNova-U1-8B-MoT-SFT"),attn_backend)
+        model=load_sensenova_model(model_path,device,os.path.join(node_cr_path,"SenseNova-U1-8B-MoT-SFT"),attn_backend,lora_path=lora_path)
         return io.NodeOutput(model)
     
 

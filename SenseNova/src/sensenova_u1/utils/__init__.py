@@ -1,9 +1,21 @@
-from .comparison import make_comparison, save_compare
+from .comparison import save_compare
+from .lora import load_and_merge_lora_weight_from_safetensors,apply_loras_gguf
+from .param_count import (
+    ModelParamInspector,
+    build_rules,
+    format_bytes,
+    format_param_count,
+)
 from .profiler import DEFAULT_IMAGE_PATCH_SIZE, InferenceProfiler
 
 __all__ = [
     "DEFAULT_IMAGE_PATCH_SIZE",
     "InferenceProfiler",
-    "make_comparison",
+    "ModelParamInspector",
+    "build_rules",
+    "format_bytes",
+    "format_param_count",
     "save_compare",
+    "load_and_merge_lora_weight_from_safetensors",
+    "apply_loras_gguf",
 ]

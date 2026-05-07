@@ -1,75 +1,197 @@
 {
-  "1": {
-    "inputs": {
-      "diffusion_models": "none",
-      "gguf": "SenseNova-U1-8B-MoT-8step-Q6_K.gguf",
-      "attn_backend": "auto"
-    },
-    "class_type": "SenseNova_SM_Model",
-    "_meta": {
-      "title": "SenseNova_SM_Model"
-    }
-  },
-  "3": {
-    "inputs": {
-      "filename_prefix": "ComfyUI",
-      "images": [
-        "10",
-        0
-      ]
-    },
-    "class_type": "SaveImage",
-    "_meta": {
-      "title": "保存图像"
-    }
-  },
-  "4": {
-    "inputs": {
-      "image": "ComfyUI_00003_ (1).png"
-    },
-    "class_type": "LoadImage",
-    "_meta": {
-      "title": "加载图像"
-    }
-  },
-  "10": {
-    "inputs": {
-      "img_mode": "edit",
-      "prompt": "改成英短蓝猫",
-      "seed": 316415668,
-      "steps": 8,
-      "target_pixels": {
-        "__value__": [
-          2720,
-          1536
-        ]
-      },
-      "cfg": 1,
-      "img_cfg": 1,
-      "timestep_shift": 3,
-      "batch_size": 1,
-      "prefetch_count": 1,
-      "cfg_norm": "none",
-      "enhance": false,
-      "think_mode": false,
-      "do_sample": true,
-      "max_new_tokens": 1024,
-      "temperature": 0.7,
-      "top_p": 0.9,
-      "top_k": 0,
-      "repetition_penalty": 0,
-      "model": [
-        "1",
-        0
+  "id": "d1f81b88-be1b-4add-8e40-ac023fd8285e",
+  "revision": 0,
+  "last_node_id": 4,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "SenseNova_SM_Model",
+      "pos": [
+        21335.0151409047,
+        -532.4174557209343
       ],
-      "image": [
-        "4",
+      "size": [
+        439.44721069576553,
+        159.5057127905585
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SenseNova_SM_Model"
+      },
+      "widgets_values": [
+        "none",
+        "SenseNova-U1-8B-MoT-SFT-fm-Q6_K.gguf",
+        "SenseNova-U1-8B-MoT-LoRA-8step-V1.0.safetensors",
+        "auto"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "SaveImage",
+      "pos": [
+        22289.785108997115,
+        -496.7478435435796
+      ],
+      "size": [
+        554.444927653105,
+        520.7285229875238
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 2
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "ComfyUI"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "SenseNova_SM_Sampler",
+      "pos": [
+        21837.546247440972,
+        -520.0230037704366
+      ],
+      "size": [
+        425.0816193671526,
+        564
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        },
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SenseNova_SM_Sampler"
+      },
+      "widgets_values": [
+        "edit",
+        "a photo of a dragon ",
+        797725436,
+        "randomize",
+        8,
+        [
+          2048,
+          2048
+        ],
+        1,
+        1,
+        3,
+        1,
+        1,
+        "none",
+        false,
+        false,
+        true,
+        1024,
+        0.7,
+        0.9,
+        0,
         0
       ]
     },
-    "class_type": "SenseNova_SM_Sampler",
-    "_meta": {
-      "title": "SenseNova_SM_Sampler"
+    {
+      "id": 4,
+      "type": "Note",
+      "pos": [
+        21375.304430608794,
+        -256.3498664191303
+      ],
+      "size": [
+        386.77521965534106,
+        289.9148013206142
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        " 1. image mode only useful  if you link a image\n 2 .txt2image  or  txt2image with interleave\n 3. think mode will take long times to infer\n\n\n 1.  图片模式只在连入图片时生效\n 2 .文生图模式 还有 interleave 模式 （image mode 选择 interleave）\n 3. 思考模式很耗时，效果当然好\n\n"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
     }
-  }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      2,
+      0,
+      3,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.9489681502767459,
+      "offset": [
+        -21139.517746781905,
+        726.9458429413838
+      ]
+    },
+    "frontendVersion": "1.42.11",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
 }
