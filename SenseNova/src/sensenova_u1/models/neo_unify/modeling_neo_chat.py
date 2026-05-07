@@ -1236,7 +1236,7 @@ class NEOChatModel(PreTrainedModel):
                 clear_flash_kv_cache(past_key_values_tu_cfg)
                 clear_flash_kv_cache(past_key_values_iu_cfg)
 
-                del indexes_image_text_uncondition, indexes_image_img_uncondition,image_prediction, indexes_image_condition
+                del indexes_image_text_uncondition, indexes_image_img_uncondition, indexes_image_condition
                 del past_key_values_cond_cfg, past_key_values_tu_cfg, past_key_values_iu_cfg
                 del attention_mask_condition, attention_mask_text_uncondition, attention_mask_img_uncondition
                 torch.cuda.empty_cache()
