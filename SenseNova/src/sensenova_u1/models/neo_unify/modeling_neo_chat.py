@@ -16,7 +16,7 @@ from .modeling_neo_vit import NEOVisionModel
 from .modeling_qwen3 import Qwen3ForCausalLM, create_block_causal_mask
 from .modeling_fm_modules import PositionEmbedding, TimestepEmbedder, FlowMatchingHead, RMSNorm, NerfEmbedder, SimpleMLPAdaLN, ConvDecoder
 from .utils import load_image_native, SYSTEM_MESSAGE_FOR_GEN
-
+import time
 logger = logging.get_logger(__name__)
 
 
@@ -1068,7 +1068,7 @@ class NEOChatModel(PreTrainedModel):
 
         generated_text = ""
         generated_images =[]
-        max_images = 10
+        # max_images = 10
         img_count = 0
 
         next_token = torch.argmax(outputs_cond.logits[:, -1, :], dim=-1)
@@ -1177,7 +1177,7 @@ class NEOChatModel(PreTrainedModel):
                 timesteps = torch.linspace(0.0, 1.0, num_steps+1, device=device)
                 if enable_timestep_shift:
                     timesteps = self._apply_time_schedule(timesteps, token_h*token_w, timestep_shift)
-
+                start_time = time.time()
                 for step_i in tqdm(range(num_steps), desc="interleave_gen", leave=False):
                     t = timesteps[step_i]
                     t_next = timesteps[step_i + 1]
@@ -1228,7 +1228,7 @@ class NEOChatModel(PreTrainedModel):
 
                     z = z + (t_next - t) * v_pred
                     image_prediction = self.unpatchify(z, self.patch_size * merge_size, image_size[1], image_size[0])
-                    del z
+                    del z,v_pred, out_cond
 
                 generated_images.append(image_prediction)
 
@@ -1241,9 +1241,12 @@ class NEOChatModel(PreTrainedModel):
                 del attention_mask_condition, attention_mask_text_uncondition, attention_mask_img_uncondition
                 torch.cuda.empty_cache()
                 torch.cuda.synchronize()
-
+                
                 img_count += 1
-
+                print(f'All images is {max_images},Generated {img_count} images, {img_count / (time.time() - start_time):.2f} images per second')
+                if img_count >= max_images: # texts is not needs
+                    del image_prediction
+                    break
                 # re-encode the generated image using the und-branch
                 pred_img = image_prediction[0].unsqueeze(0).to(torch.bfloat16)
                 # re-normalize the image
@@ -1300,8 +1303,15 @@ class NEOChatModel(PreTrainedModel):
                 outputs_cond, t_index_cond = append_image_to_cache(past_key_values_cond, t_index_cond)
                 outputs_tu, t_index_tu = append_image_to_cache(past_key_values_tu, t_index_tu)
 
-                next_token = torch.argmax(outputs_cond.logits[:, -1, :], dim=-1)
+                del vit_embeds, inputs_embeds_img, abs_pos_w, abs_pos_h, flatten_pixel_values
+                del und_img, raw_img, pred_img, gen_grid_hw
 
+                next_token = torch.argmax(outputs_cond.logits[:, -1, :], dim=-1)
+                del outputs_cond, outputs_tu
+
+        del past_key_values_cond, past_key_values_tu, past_key_values_iu
+        torch.cuda.empty_cache()
+        torch.cuda.synchronize()
         return generated_text, generated_images
 
     @torch.no_grad()
