@@ -9,8 +9,8 @@ import folder_paths
 
 from .node_utils import  tensor2pillist,clear_comfyui_cache
 from .SenseNova.examples.editing.inference import load_sensenova_model,infer_sensenova_edit
-from .SenseNova.examples.t2i.inference import infer_sensenova_t2i
-from .SenseNova.examples.interleave.inference import infer_sensenova_interleave
+from .SenseNova.examples.t2i.inference import infer_sensenova_t2i,SUPPORTED_RESOLUTIONS
+from .SenseNova.examples.interleave.inference import infer_sensenova_interleave,SUPPORTED_RESOLUTIONS as SUPPORTED_RESOLUTIONS_interleave
 from .SenseNova.examples.vqa.inference import infer_sensenova_vqa
 
 
@@ -67,12 +67,13 @@ class SenseNova_SM_Sampler(io.ComfyNode):
                 io.String.Input("prompt",default="a photo of a cat",multiline=True),
                 io.Int.Input("seed", default=0, min=0, max=MAX_SEED),
                 io.Int.Input("steps", default=8, min=1, max=10000, step=1),
-                io.Combo.Input("target_pixels",options= [[2048, 2048], [2720, 1536], [1536, 2720], [2496, 1664],[1664, 2496],[2368, 1760],[1760, 2368],[1440, 2880],[2880, 1440],[1152, 3456],[3456, 1152]]),
+                io.Combo.Input("target_pixels",options= ["1:1", "16:9", "9:16", "3:2","2:3","4:3","3:4","1:2","2:1","1:3","3:1"]),
                 io.Float.Input("cfg", default=1.0, min=0.0, max=10.0, step=0.1, round=0.01,),
                 io.Float.Input("img_cfg", default=1.0, min=0.0, max=100.0, step=0.1, round=0.01,),
                 io.Float.Input("timestep_shift", default=3.0, min=-1.0, max=10.0, step=0.1, ),
                 io.Int.Input("batch_size", default=1, min=1, max=64,step=1),
                 io.Int.Input("prefetch_count", default=1, min=0, max=64,step=1),
+                io.Int.Input("interleave_max", default=4, min=1, max=MAX_SEED),
                 io.Combo.Input("cfg_norm",options= ["none", "global", "channel"]),
                 io.Boolean.Input("enhance", default=False),
                 io.Boolean.Input("think_mode", default=False),
@@ -91,13 +92,13 @@ class SenseNova_SM_Sampler(io.ComfyNode):
         )
     
     @classmethod
-    def execute(cls, model, img_mode,prompt,seed, steps, target_pixels,cfg,img_cfg,timestep_shift,batch_size,prefetch_count,cfg_norm,enhance,
+    def execute(cls, model, img_mode,prompt,seed, steps, target_pixels,cfg,img_cfg,timestep_shift,batch_size,prefetch_count,interleave_max,cfg_norm,enhance,
                 think_mode,do_sample,max_new_tokens,temperature,top_p,top_k,repetition_penalty,image=None) -> io.NodeOutput:
         clear_comfyui_cache()
         top_k=None if top_k==0 else top_k
         repetition_penalty=repetition_penalty if repetition_penalty>0.0 else None
         cfg_interval=[0.0,1.0]
-        width,height=target_pixels
+        width,height=SUPPORTED_RESOLUTIONS_interleave[target_pixels] if img_mode=="interleave" else SUPPORTED_RESOLUTIONS[target_pixels]
         images=tensor2pillist(image) if image is not None else None
         
         if prefetch_count==0:
@@ -112,11 +113,11 @@ class SenseNova_SM_Sampler(io.ComfyNode):
                 image=torch.zeros((1,height, width,3))
                 text=infer_sensenova_vqa(model,prompt,images[0],max_new_tokens,do_sample,temperature,top_p,top_k,repetition_penalty,prefetch_count)
             else:
-                text,image=infer_sensenova_interleave(model,prompt,cfg,steps,timestep_shift,img_cfg,images,cfg_interval,width,height,think_mode,seed,prefetch_count)
+                text,image=infer_sensenova_interleave(model,prompt,cfg,steps,timestep_shift,img_cfg,images,cfg_interval,width,height,think_mode,seed,prefetch_count,interleave_max)
         else:
             if "interleave"==img_mode:
                 print(f"infer_mode is : interleave without image")
-                text,image=infer_sensenova_interleave(model,prompt,cfg,steps,timestep_shift,img_cfg,images,cfg_interval,width,height,think_mode,seed,prefetch_count)
+                text,image=infer_sensenova_interleave(model,prompt,cfg,steps,timestep_shift,img_cfg,images,cfg_interval,width,height,think_mode,seed,prefetch_count,interleave_max)
             else:
                 print(f"infer_mode is : t2i")
                 text,image=infer_sensenova_t2i(model,prompt,cfg,cfg_norm,steps,batch_size,timestep_shift,cfg_interval,width,height,seed,prefetch_count,think_mode,enhance,)
