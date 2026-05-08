@@ -338,6 +338,7 @@ class SenseNovaU1Editing:
         image_size: tuple[int, int] = (DEFAULT_WIDTH, DEFAULT_HEIGHT),
         cfg_scale: float = 4.0,
         img_cfg_scale: float = 1.0,
+        max_images: int = 4,
         timestep_shift: float = 3.0,
         cfg_interval: tuple[float, float] = (0.0, 1.0),
         num_steps: int = 50,
@@ -357,6 +358,7 @@ class SenseNovaU1Editing:
                     image_size=image_size,
                     cfg_scale=cfg_scale,
                     img_cfg_scale=img_cfg_scale,
+                    max_images=max_images,
                     timestep_shift=timestep_shift,
                     cfg_interval=cfg_interval,
                     num_steps=num_steps,
@@ -372,6 +374,7 @@ class SenseNovaU1Editing:
                 image_size=image_size,
                 cfg_scale=cfg_scale,
                 img_cfg_scale=img_cfg_scale,
+                max_images=max_images,
                 timestep_shift=timestep_shift,
                 cfg_interval=cfg_interval,
                 num_steps=num_steps,
@@ -379,7 +382,8 @@ class SenseNovaU1Editing:
                 think_mode=think_mode,
                 seed=seed,
             )
-        return text, _to_tensor(image_tensors)
+        
+        return text, torch.cat( [_to_tensor(i) for i in image_tensors], dim=0)
 
 
 
