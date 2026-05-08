@@ -1,43 +1,9 @@
 {
   "id": "d1f81b88-be1b-4add-8e40-ac023fd8285e",
   "revision": 0,
-  "last_node_id": 4,
-  "last_link_id": 2,
+  "last_node_id": 6,
+  "last_link_id": 5,
   "nodes": [
-    {
-      "id": 1,
-      "type": "SenseNova_SM_Model",
-      "pos": [
-        21335.0151409047,
-        -532.4174557209343
-      ],
-      "size": [
-        439.44721069576553,
-        159.5057127905585
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "model",
-          "type": "MODEL",
-          "links": [
-            1
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "SenseNova_SM_Model"
-      },
-      "widgets_values": [
-        "none",
-        "SenseNova-U1-8B-MoT-SFT-fm-Q6_K.gguf",
-        "SenseNova-U1-8B-MoT-LoRA-8step-V1.0.safetensors",
-        "auto"
-      ]
-    },
     {
       "id": 3,
       "type": "SaveImage",
@@ -56,83 +22,13 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 2
+          "link": 5
         }
       ],
       "outputs": [],
       "properties": {},
       "widgets_values": [
         "ComfyUI"
-      ]
-    },
-    {
-      "id": 2,
-      "type": "SenseNova_SM_Sampler",
-      "pos": [
-        21837.546247440972,
-        -520.0230037704366
-      ],
-      "size": [
-        425.0816193671526,
-        564
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "model",
-          "type": "MODEL",
-          "link": 1
-        },
-        {
-          "name": "image",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "links": [
-            2
-          ]
-        },
-        {
-          "name": "text",
-          "type": "STRING",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "SenseNova_SM_Sampler"
-      },
-      "widgets_values": [
-        "edit",
-        "a photo of a dragon ",
-        797725436,
-        "randomize",
-        8,
-        [
-          2048,
-          2048
-        ],
-        1,
-        1,
-        3,
-        1,
-        1,
-        "none",
-        false,
-        false,
-        true,
-        1024,
-        0.7,
-        0.9,
-        0,
-        0
       ]
     },
     {
@@ -147,7 +43,7 @@
         289.9148013206142
       ],
       "flags": {},
-      "order": 1,
+      "order": 0,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -157,20 +53,122 @@
       ],
       "color": "#432",
       "bgcolor": "#653"
+    },
+    {
+      "id": 1,
+      "type": "SenseNova_SM_Model",
+      "pos": [
+        21335.0151409047,
+        -532.4174557209343
+      ],
+      "size": [
+        439.44721069576553,
+        159.5057127905585
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SenseNova_SM_Model"
+      },
+      "widgets_values": [
+        "none",
+        "SenseNova-U1-8B-MoT-8step-Q6_K.gguf",
+        "none",
+        "auto"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "SenseNova_SM_Sampler",
+      "pos": [
+        21831.561304545507,
+        -471.7404623567197
+      ],
+      "size": [
+        400,
+        588
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 4
+        },
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            5
+          ]
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SenseNova_SM_Sampler"
+      },
+      "widgets_values": [
+        "edit",
+        "讲一下经典童话《卖火柴的小女孩》，但这次请给出一个温暖的平行宇宙改编版图文绘本。在最后一次擦亮火柴时，出现的不是幻象，而是一只拥有魔法的驯鹿，它载着小女孩飞向了有糖果和壁炉的城堡",
+        783151489,
+        "randomize",
+        8,
+        "1:1",
+        1,
+        1,
+        3,
+        1,
+        1,
+        2,
+        "none",
+        false,
+        false,
+        true,
+        1024,
+        0.7,
+        0.9,
+        0,
+        0
+      ]
     }
   ],
   "links": [
     [
-      1,
+      4,
       1,
       0,
-      2,
+      6,
       0,
       "MODEL"
     ],
     [
-      2,
-      2,
+      5,
+      6,
       0,
       3,
       0,
@@ -181,10 +179,10 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.9489681502767459,
+      "scale": 1.0438649653044214,
       "offset": [
-        -21139.517746781905,
-        726.9458429413838
+        -21240.289523546486,
+        682.9481410099086
       ]
     },
     "frontendVersion": "1.42.11",
