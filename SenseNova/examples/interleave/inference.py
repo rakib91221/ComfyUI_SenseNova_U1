@@ -377,7 +377,7 @@ def parse_args() -> argparse.Namespace:
     )
     return p.parse_args()
 
-def infer_sensenova_interleave(engine,prompt,cfg_scale,num_steps,timestep_shift,img_cfg_scale,input_images,cfg_interval,width,height,think_mode,seed,prefetch_count):
+def infer_sensenova_interleave(engine,prompt,cfg_scale,num_steps,timestep_shift,img_cfg_scale,input_images,cfg_interval,width,height,think_mode,seed,prefetch_count,max_images):
     resolution="1:1"
     if width is not None and height is not None:
         fallback_w, fallback_h = width, height
@@ -398,6 +398,7 @@ def infer_sensenova_interleave(engine,prompt,cfg_scale,num_steps,timestep_shift,
             image_size=(w, h),
             cfg_scale=cfg_scale,
             img_cfg_scale=img_cfg_scale,
+            max_images=max_images,
             timestep_shift=timestep_shift,
             cfg_interval=cfg_interval,
             num_steps=num_steps,
